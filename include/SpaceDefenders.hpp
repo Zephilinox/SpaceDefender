@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "LuaHandler.hpp"
+
 class SpaceDefenders
 {
 public:
@@ -17,6 +19,8 @@ private:
     void draw();
 
     sf::RenderWindow m_window;
+
+    LuaHandler m_luaHandler;
 };
 
 #endif //SPACEDEFENDERS_HPP
