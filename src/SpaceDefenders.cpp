@@ -3,6 +3,9 @@
 SpaceDefenders::SpaceDefenders()
 {
     m_window.create(sf::VideoMode(1280, 720, 32), "Space Defenders");
+
+    m_luaHandler.loadFile("data/scripts/main.lua");
+    m_luaHandler.execute();
 }
 
 void SpaceDefenders::run()
@@ -47,7 +50,10 @@ void SpaceDefenders::handleEvent(const sf::Event& e)
 
 void SpaceDefenders::update(float dt)
 {
-
+    for (auto& func : m_luaHandler.getHookFunctions("tick"))
+    {
+        func();
+    }
 }
 
 void SpaceDefenders::draw()
