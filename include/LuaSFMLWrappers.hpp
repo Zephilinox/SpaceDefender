@@ -31,6 +31,9 @@ public:
     void setSize(LuaVector2f vecSize) {m_shape.setSize(vecSize);}
     LuaVector2f getSize() const {return LuaVector2f(m_shape.getSize());}
 
+    void setPosition (LuaVector2f vecPos) {m_shape.setPosition(vecPos);}
+    LuaVector2f getPosition() const {return LuaVector2f(m_shape.getPosition());} //Can't do shape.position.x because the luaVec returned is const
+
 private:
     sf::RectangleShape m_shape;
 };
@@ -46,7 +49,7 @@ void registerLuaSFMLWrappers(lua_State* L)
         beginClass<LuaRectangleShape>("RectangleShape").
             addConstructor<void(*)(void)>().
             addProperty("size", &LuaRectangleShape::getSize, &LuaRectangleShape::setSize).
-            //addProperty("sizeX", &LuaRectangleShape::getSizeX, &LuaRectangleShape::setSizeX).
+            addProperty("position", &LuaRectangleShape::getPosition, &LuaRectangleShape::setPosition).
         endClass();
 }
 

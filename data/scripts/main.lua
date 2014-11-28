@@ -7,6 +7,7 @@ local rectShape = RectangleShape()
 function grow(dt)
 	vector.x = vector.x + (100 * dt)
 	rectShape.size = vector
+	rectShape.position = vector
 end
 
 function drawRect()
