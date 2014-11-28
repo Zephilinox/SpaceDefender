@@ -8,6 +8,8 @@ class LuaVector2f
 {
 public:
     LuaVector2f() = default;
+    LuaVector2f(sf::Vector2f v2f) {m_vector = v2f;}
+    operator sf::Vector2f&() {return m_vector;}
 
     void setX(float x) {m_vector.x = x;}
     void setY(float y) {m_vector.y = y;}
@@ -19,6 +21,20 @@ private:
     sf::Vector2f m_vector;
 };
 
+class LuaRectangleShape
+{
+public:
+    LuaRectangleShape() = default;
+    LuaRectangleShape(sf::RectangleShape shape) {m_shape = shape;}
+    operator sf::RectangleShape&() {return m_shape;}
+
+    void setSize(LuaVector2f vecSize) {m_shape.setSize(vecSize);}
+    LuaVector2f getSize() const {return LuaVector2f(m_shape.getSize());}
+
+private:
+    sf::RectangleShape m_shape;
+};
+
 void registerLuaSFMLWrappers(lua_State* L)
 {
     luabridge::getGlobalNamespace(L).
@@ -26,6 +42,11 @@ void registerLuaSFMLWrappers(lua_State* L)
             addConstructor<void(*)(void)>().
             addProperty("x", &LuaVector2f::getX, &LuaVector2f::setX).
             addProperty("y", &LuaVector2f::getY, &LuaVector2f::setY).
+        endClass().
+        beginClass<LuaRectangleShape>("RectangleShape").
+            addConstructor<void(*)(void)>().
+            addProperty("size", &LuaRectangleShape::getSize, &LuaRectangleShape::setSize).
+            //addProperty("sizeX", &LuaRectangleShape::getSizeX, &LuaRectangleShape::setSizeX).
         endClass();
 }
 

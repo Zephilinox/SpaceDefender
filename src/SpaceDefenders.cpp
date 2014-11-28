@@ -1,8 +1,15 @@
 #include "SpaceDefenders.hpp"
 
+#include <iostream>
+
+#include "LuaSFMLWrappers.hpp"
+
 SpaceDefenders::SpaceDefenders()
 {
     m_window.create(sf::VideoMode(1280, 720, 32), "Space Defenders");
+
+    //Register C++
+    registerLuaSFMLWrappers(m_luaHandler.getLuaState());
 
     m_luaHandler.loadFile("data/scripts/main.lua");
     m_luaHandler.execute();
@@ -28,6 +35,8 @@ void SpaceDefenders::gameLoop()
 
         update(prevFrameTime.asSeconds());
         draw();
+
+        prevFrameTime = frameClock.restart();
     }
 }
 
@@ -52,12 +61,21 @@ void SpaceDefenders::update(float dt)
 {
     for (auto& func : m_luaHandler.getHookFunctions("tick"))
     {
-        func();
+        func(dt);
     }
 }
 
 void SpaceDefenders::draw()
 {
     m_window.clear(sf::Color(40, 40, 40));
+
+    for (auto& func : m_luaHandler.getHookFunctions("draw"))
+    {
+        //Not sure why, but we have to grab it as the wrapper first, then convert said wrapper to the actual object
+        LuaRectangleShape rs = func();
+        sf::RectangleShape rs2 = rs;
+        m_window.draw(rs2);
+    }
+
     m_window.display();
 }

@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "Utility.hpp"
-#include "LuaSFMLWrappers.hpp"
 
 LuaHandler::LuaHandler()
 {
@@ -25,9 +24,7 @@ LuaHandler::LuaHandler()
     //Create events
     m_hooks["invalid"];
     m_hooks["tick"];
-
-    //Register C++
-    registerLuaSFMLWrappers(m_luaState);
+    m_hooks["draw"];
 }
 
 bool LuaHandler::hook(std::string eventName, std::string uniqueFuncName, luabridge::LuaRef luaFunc)
