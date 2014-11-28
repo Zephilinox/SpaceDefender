@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Utility.hpp"
+#include "LuaSFMLWrappers.hpp"
 
 LuaHandler::LuaHandler()
 {
@@ -14,7 +15,6 @@ LuaHandler::LuaHandler()
     //Tell lua about this class
     luabridge::getGlobalNamespace(getLuaState()).
         beginClass<LuaHandler>("LuaHandler").
-            addConstructor<void(*)(void)>().
             addFunction("hook", &LuaHandler::hook).
         endClass();
 
@@ -25,6 +25,9 @@ LuaHandler::LuaHandler()
     //Create events
     m_hooks["invalid"];
     m_hooks["tick"];
+
+    //Register C++
+    registerLuaSFMLWrappers(m_luaState);
 }
 
 bool LuaHandler::hook(std::string eventName, std::string uniqueFuncName, luabridge::LuaRef luaFunc)
