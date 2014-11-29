@@ -1,17 +1,14 @@
-local vector = Vector2f(0, 0)
-vector.x = 10
-vector.y = 10
-
 local player = {}
 player.shape = RectangleShape()
 player.shape:setFillColor(Color(255, 180, 0, 255))
+player.shape:setSize(Vector2f(10, 10))
 player.shape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
 player.shape:setOrigin(Vector2f(0, 5))
 
 function player:randomColor()
 	if Input:isMousePressed("Left") then
 		local newCol = Color(math.random(256)-1, math.random(256)-1, math.random(256)-1, 255)
-		player.shape:setFillColor(newCol)
+		self.shape:setFillColor(newCol)
 	end
 end
 
@@ -19,9 +16,9 @@ function player:rotate(key)
 	local rotation = player.shape:getRotation()
 	
 	if key == "Q" then
-		player.shape:setRotation(rotation + 10)
+		self.shape:setRotation(rotation + 10)
 	elseif key == "E" then
-		player.shape:setRotation(rotation - 10)
+		self.shape:setRotation(rotation - 10)
 	end
 end
 
@@ -44,26 +41,28 @@ function player:move(dt)
 		vecPos.x = vecPos.x + 100 * dt
 	end
 
-	player.shape:setPosition(player.shape:getPosition() + vecPos)
+	self.shape:setPosition(player.shape:getPosition() + vecPos)
 end
 
 function player:grow(dt)
+	local vector = self.shape:getSize()
+	
 	if vector.x < 100 then
 		vector.x = vector.x + (100 * dt)
-		player.shape:setSize(vector)
+		self.shape:setSize(vector)
 	end
 end
 
 function player:followMouse(dt)
-	local shapePos = player.shape:getPosition()
+	local shapePos = self.shape:getPosition()
 	local mousePos = Input:getMousePosition(Window)
 	local diff = Vector2f(shapePos.x - mousePos.x, shapePos.y - mousePos.y)
 	
-	player.shape:setRotation(diff:degrees())
+	self.shape:setRotation(diff:degrees())
 end
 
 function player:drawRect()
-	return player.shape
+	return self.shape
 end
 
 LuaHandler:hook("eventKeyPressed", "rotate", player.rotate, player)
