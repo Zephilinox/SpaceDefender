@@ -5,21 +5,33 @@ vector.y = 10
 local rectShape = RectangleShape()
 rectShape:setFillColor(Color(255, 180, 0, 255))
 
-function move(key)
-	local vecPos = Vector2f()
+function rotate(key)
+	local rotation = rectShape:getRotation()
 	
-	if key == "W" then
-		vecPos.y = vecPos.y - 10
-		local col = rectShape:getFillColor()
-		col.b = 255
-		rectShape:setFillColor(col)
-	elseif key == "A" then
-		vecPos.x = vecPos.x - 10
-		rectShape:setRotation(rectShape:getRotation() + 1)
-	elseif key == "S" then
-		vecPos.y = vecPos.y + 10
-	elseif key == "D" then
-		vecPos.x = vecPos.x + 10
+	if key == "Q" then
+		rectShape:setRotation(rotation + 10)
+	elseif key == "E" then
+		rectShape:setRotation(rotation - 10)
+	end
+end
+
+function move(dt)
+	local vecPos = Vector2f()
+
+	if Keyboard.isKeyPressed("W") then
+		vecPos.y = vecPos.y - 100 * dt
+	end
+	
+	if Keyboard.isKeyPressed("A") then
+		vecPos.x = vecPos.x - 100 * dt
+	end
+	
+	if Keyboard.isKeyPressed("S") then
+		vecPos.y = vecPos.y + 100 * dt
+	end
+	
+	if Keyboard.isKeyPressed("D") then
+		vecPos.x = vecPos.x + 100 * dt
 	end
 
 	rectShape:setPosition(rectShape:getPosition() + vecPos)
@@ -34,6 +46,7 @@ function drawRect()
 	return rectShape
 end
 
-LuaHandler:hook("eventKeyPressed", "move", move)
+LuaHandler:hook("eventKeyPressed", "rotate", rotate)
+LuaHandler:hook("update", "move", move)
 LuaHandler:hook("update", "grow", grow)
 LuaHandler:hook("draw", "drawRect", drawRect)

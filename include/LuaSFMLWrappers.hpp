@@ -47,6 +47,11 @@ private:
     sf::RectangleShape m_shape;
 };
 
+bool isKeyPressed(std::string key)
+{
+    return sf::Keyboard::isKeyPressed(thor::toKeyboardKey(key));
+}
+
 void registerLuaSFMLWrappers(lua_State* L)
 {
     luabridge::getGlobalNamespace(L).
@@ -74,7 +79,10 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("getRotation", &LuaRectangleShape::getRotation).
             addFunction("setFillColor", &LuaRectangleShape::setFillColor).
             addFunction("getFillColor", &LuaRectangleShape::getFillColor).
-        endClass();
+        endClass().
+        beginNamespace("Keyboard").
+            addFunction("isKeyPressed", &isKeyPressed).
+        endNamespace();
 }
 
 #endif //LUASFMLWRAPPERS_HPP_INCLUDED
