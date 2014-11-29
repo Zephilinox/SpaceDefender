@@ -60,10 +60,19 @@ private:
     sf::RenderWindow* m_window;
 };
 
-bool KeyboardIsKeyPressed(std::string key)
+class LuaInput
 {
-    return sf::Keyboard::isKeyPressed(thor::toKeyboardKey(key));
-}
+public:
+    bool isKeyPressed(std::string key)
+    {
+        return sf::Keyboard::isKeyPressed(thor::toKeyboardKey(key));
+    }
+
+    bool isMousePressed(std::string mouseButton)
+    {
+        return sf::Mouse::isButtonPressed(thor::toMouseButton(mouseButton));
+    }
+};
 
 void registerLuaSFMLWrappers(lua_State* L)
 {
@@ -96,9 +105,15 @@ void registerLuaSFMLWrappers(lua_State* L)
         beginClass<LuaWindow>("Window").
             addFunction("getSize", &LuaWindow::getSize).
         endClass().
-        beginNamespace("Keyboard").
-            addFunction("isKeyPressed", &KeyboardIsKeyPressed).
-        endNamespace();
+        beginClass<LuaInput>("Input").
+            addFunction("isKeyPressed", &LuaInput::isKeyPressed).
+            addFunction("isMousePressed", &LuaInput::isMousePressed).
+        endClass();
+
+    //Push classes for lua access
+    LuaInput luaInput;
+    luabridge::push(L, luaInput);
+    lua_setglobal(L, "Input");
 }
 
 #endif //LUASFMLWRAPPERS_HPP_INCLUDED
