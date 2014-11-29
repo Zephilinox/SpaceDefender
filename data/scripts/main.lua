@@ -10,6 +10,9 @@ function move(key)
 	
 	if key == "W" then
 		vecPos.y = vecPos.y - 10
+		local col = rectShape:getFillColor()
+		col.b = 255
+		rectShape:setFillColor(col)
 	elseif key == "A" then
 		vecPos.x = vecPos.x - 10
 		rectShape:setRotation(rectShape:getRotation() + 1)
