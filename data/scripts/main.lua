@@ -11,18 +11,19 @@ function move(key)
 		vecPos.y = vecPos.y - 10
 	elseif key == "A" then
 		vecPos.x = vecPos.x - 10
+		rectShape:setRotation(rectShape:getRotation() + 1)
 	elseif key == "S" then
 		vecPos.y = vecPos.y + 10
 	elseif key == "D" then
 		vecPos.x = vecPos.x + 10
 	end
 
-	rectShape.position = rectShape.position + vecPos
+	rectShape:setPosition(rectShape:getPosition() + vecPos)
 end
 
 function grow(dt)
 	vector.x = vector.x + (100 * dt)
-	rectShape.size = vector
+	rectShape:setSize(vector)
 end
 
 function drawRect()
