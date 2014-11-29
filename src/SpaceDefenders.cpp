@@ -13,6 +13,11 @@ SpaceDefenders::SpaceDefenders()
     //Register C++
     registerLuaSFMLWrappers(m_luaHandler.getLuaState());
 
+    //Push window to the lua state for access
+    LuaWindow luaWindow(&m_window);
+    luabridge::push(m_luaHandler.getLuaState(), luaWindow);
+    lua_setglobal(m_luaHandler.getLuaState(), "Window");
+
     m_luaHandler.loadFile("data/scripts/main.lua");
     m_luaHandler.execute();
 }

@@ -1,9 +1,10 @@
-local vector = Vector2f()
+local vector = Vector2f(0, 0)
 vector.x = 10
 vector.y = 10
 
 local rectShape = RectangleShape()
 rectShape:setFillColor(Color(255, 180, 0, 255))
+rectShape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
 
 function rotate(key)
 	local rotation = rectShape:getRotation()
@@ -16,7 +17,7 @@ function rotate(key)
 end
 
 function move(dt)
-	local vecPos = Vector2f()
+	local vecPos = Vector2f(0, 0)
 
 	if Keyboard.isKeyPressed("W") then
 		vecPos.y = vecPos.y - 100 * dt

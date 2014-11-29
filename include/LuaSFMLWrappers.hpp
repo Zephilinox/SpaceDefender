@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <LuaBridge/luabridge.h>
+#include <Thor/Input.hpp>
 
 class LuaVector2f
 {
@@ -47,7 +48,19 @@ private:
     sf::RectangleShape m_shape;
 };
 
-bool isKeyPressed(std::string key)
+class LuaWindow
+{
+public:
+    LuaWindow(sf::RenderWindow* window) {m_window = window;}
+    operator sf::RenderWindow&() {return *m_window;}
+
+    LuaVector2f getSize() {return sf::Vector2f(m_window->getSize());}
+
+private:
+    sf::RenderWindow* m_window;
+};
+
+bool KeyboardIsKeyPressed(std::string key)
 {
     return sf::Keyboard::isKeyPressed(thor::toKeyboardKey(key));
 }
@@ -56,7 +69,7 @@ void registerLuaSFMLWrappers(lua_State* L)
 {
     luabridge::getGlobalNamespace(L).
         beginClass<LuaVector2f>("Vector2f").
-            addConstructor<void(*)(void)>().
+            addConstructor<void(*)(float, float)>().
             addProperty("x", &LuaVector2f::getX, &LuaVector2f::setX).
             addProperty("y", &LuaVector2f::getY, &LuaVector2f::setY).
             addFunction("__add", &LuaVector2f::operator+).
@@ -80,8 +93,11 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("setFillColor", &LuaRectangleShape::setFillColor).
             addFunction("getFillColor", &LuaRectangleShape::getFillColor).
         endClass().
+        beginClass<LuaWindow>("Window").
+            addFunction("getSize", &LuaWindow::getSize).
+        endClass().
         beginNamespace("Keyboard").
-            addFunction("isKeyPressed", &isKeyPressed).
+            addFunction("isKeyPressed", &KeyboardIsKeyPressed).
         endNamespace();
 }
 
