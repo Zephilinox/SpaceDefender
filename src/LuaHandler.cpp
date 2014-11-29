@@ -23,7 +23,9 @@ LuaHandler::LuaHandler()
 
     //Create events
     m_hooks["invalid"];
-    m_hooks["tick"];
+    m_hooks["eventKeyPressed"];
+    m_hooks["eventKeyReleased"];
+    m_hooks["update"];
     m_hooks["draw"];
 }
 

@@ -49,17 +49,32 @@ void SpaceDefenders::handleEvent(const sf::Event& e)
             m_window.close();
         } break;
 
+        case sf::Event::KeyPressed:
+        {
+            for (auto& func : m_luaHandler.getHookFunctions("eventKeyPressed"))
+            {
+                func(e);
+            }
+        } break;
+
+        case sf::Event::KeyReleased:
+        {
+            for (auto& func : m_luaHandler.getHookFunctions("eventKeyReleased"))
+            {
+                func(e);
+            }
+        } break;
+
         default:
         {
 
         } break;
     }
-
 }
 
 void SpaceDefenders::update(float dt)
 {
-    for (auto& func : m_luaHandler.getHookFunctions("tick"))
+    for (auto& func : m_luaHandler.getHookFunctions("update"))
     {
         func(dt);
     }
@@ -71,10 +86,7 @@ void SpaceDefenders::draw()
 
     for (auto& func : m_luaHandler.getHookFunctions("draw"))
     {
-        //Not sure why, but we have to grab it as the wrapper first, then convert said wrapper to the actual object
-        LuaRectangleShape rs = func();
-        sf::RectangleShape rs2 = rs;
-        m_window.draw(rs2);
+        m_window.draw(func().cast<LuaRectangleShape>());
     }
 
     m_window.display();

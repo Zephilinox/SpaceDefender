@@ -14,5 +14,5 @@ function drawRect()
 	return rectShape
 end
 
-LuaHandler:hook("tick", "grow", grow)
+LuaHandler:hook("update", "grow", grow)
 LuaHandler:hook("draw", "drawRect", drawRect)
