@@ -3,6 +3,7 @@ vector.x = 10
 vector.y = 10
 
 local rectShape = RectangleShape()
+rectShape:setFillColor(Color(255, 180, 0, 255))
 
 function move(key)
 	local vecPos = Vector2f()

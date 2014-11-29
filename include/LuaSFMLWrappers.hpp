@@ -24,6 +24,25 @@ private:
     sf::Vector2f m_vector;
 };
 
+class LuaColor
+{
+public:
+    LuaColor() = default;
+    LuaColor(int r, int g, int b, int a)
+    {
+        m_color.r = r;
+        m_color.g = g;
+        m_color.b = b;
+        m_color.a = a;
+    };
+    LuaColor(sf::Color col) {m_color = col;}
+    operator sf::Color&() {return m_color;}
+
+
+private:
+    sf::Color m_color;
+};
+
 class LuaRectangleShape
 {
 public:
@@ -40,6 +59,9 @@ public:
     void setRotation (float angle) {m_shape.setRotation(angle);}
     float getRotation () const {return m_shape.getRotation();}
 
+    void setFillColor(LuaColor col) {m_shape.setFillColor(col);}
+    LuaColor getFillColor() {return m_shape.getFillColor();}
+
 private:
     sf::RectangleShape m_shape;
 };
@@ -54,6 +76,9 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("__add", &LuaVector2f::operator+).
             addFunction("__sub", &LuaVector2f::operator+).
         endClass().
+        beginClass<LuaColor>("Color").
+            addConstructor<void(*)(int, int, int, int)>().
+        endClass().
         beginClass<LuaRectangleShape>("RectangleShape").
             addConstructor<void(*)(void)>().
             addFunction("setSize", &LuaRectangleShape::setSize).
@@ -62,6 +87,8 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("getPosition", &LuaRectangleShape::getPosition).
             addFunction("setRotation", &LuaRectangleShape::setRotation).
             addFunction("getRotation", &LuaRectangleShape::getRotation).
+            addFunction("setFillColor", &LuaRectangleShape::setFillColor).
+            addFunction("getFillColor", &LuaRectangleShape::getFillColor).
         endClass();
 }
 
