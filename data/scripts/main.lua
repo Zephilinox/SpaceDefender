@@ -5,7 +5,7 @@ vector.y = 10
 local rectShape = RectangleShape()
 
 function move(key)
-	local vecPos = rectShape.position;
+	local vecPos = Vector2f()
 	
 	if key == "W" then
 		vecPos.y = vecPos.y - 10
@@ -17,7 +17,7 @@ function move(key)
 		vecPos.x = vecPos.x + 10
 	end
 
-	rectShape.position = vecPos
+	rectShape.position = rectShape.position + vecPos
 end
 
 function grow(dt)
