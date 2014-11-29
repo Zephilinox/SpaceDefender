@@ -4,15 +4,31 @@ vector.y = 10
 
 local rectShape = RectangleShape()
 
+function move(key)
+	local vecPos = rectShape.position;
+	
+	if key == "W" then
+		vecPos.y = vecPos.y - 10
+	elseif key == "A" then
+		vecPos.x = vecPos.x - 10
+	elseif key == "S" then
+		vecPos.y = vecPos.y + 10
+	elseif key == "D" then
+		vecPos.x = vecPos.x + 10
+	end
+
+	rectShape.position = vecPos
+end
+
 function grow(dt)
 	vector.x = vector.x + (100 * dt)
 	rectShape.size = vector
-	rectShape.position = vector
 end
 
 function drawRect()
 	return rectShape
 end
 
+LuaHandler:hook("eventKeyPressed", "move", move)
 LuaHandler:hook("update", "grow", grow)
 LuaHandler:hook("draw", "drawRect", drawRect)

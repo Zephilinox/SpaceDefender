@@ -39,16 +39,19 @@ print("environment = "..environment)
 local include_dirs_libs = {
 "extlibs/headers/SFML/include",
 "extlibs/headers/Lua/include",
+"extlibs/headers/Thor/include",
 }
 
 local include_dirs_header_only = {
 "include",
 "extlibs/headers/LuaBridge/include",
+"extlibs/headers/Aurora/include",
 }
 
 local libs = {
 "extlibs/"..environment.."/SFML/lib",
 "extlibs/"..environment.."/Lua/lib",
+"extlibs/"..environment.."/Thor/lib",
 }
 
 --copy data folder to build and bin folders
@@ -104,7 +107,7 @@ solution("GalacticEmpires")
             
             if system == "windows" then				
                 defines     {"SFML_STATIC"}
-                links       {"lua52", "sfml-graphics-s-d", "sfml-window-s-d", "sfml-system-s-d"}
+                links       {"lua52", "thor-s-d", "sfml-graphics-s-d", "sfml-window-s-d", "sfml-system-s-d"}
             else 
                 links       {"lua5.2", "sfml-graphics", "sfml-window", "sfml-system"}
             end
@@ -117,7 +120,7 @@ solution("GalacticEmpires")
             
             if system == "windows" then
                 defines     {"SFML_STATIC"}
-                links       {"lua52", "sfml-graphics-s", "sfml-window-s", "sfml-system-s"}
+                links       {"lua52", "thor-s", "sfml-graphics-s", "sfml-window-s", "sfml-system-s"}
             else 
                 links       {"lua5.2", "sfml-graphics", "sfml-window", "sfml-system"}
             end

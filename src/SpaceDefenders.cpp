@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <Thor/Input.hpp>
+
 #include "LuaSFMLWrappers.hpp"
 
 SpaceDefenders::SpaceDefenders()
@@ -53,7 +55,7 @@ void SpaceDefenders::handleEvent(const sf::Event& e)
         {
             for (auto& func : m_luaHandler.getHookFunctions("eventKeyPressed"))
             {
-                func(e);
+                func(thor::toString(e.key.code));
             }
         } break;
 
@@ -61,7 +63,7 @@ void SpaceDefenders::handleEvent(const sf::Event& e)
         {
             for (auto& func : m_luaHandler.getHookFunctions("eventKeyReleased"))
             {
-                func(e);
+                func(thor::toString(e.key.code));
             }
         } break;
 
