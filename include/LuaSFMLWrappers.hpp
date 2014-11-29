@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <LuaBridge/luabridge.h>
 #include <Thor/Input.hpp>
+#include <Thor/Vectors.hpp>
 
 class LuaVector2f
 {
@@ -21,7 +22,14 @@ public:
     float getX() const {return m_vector.x;}
     float getY() const {return m_vector.y;}
 
-    float degrees() const {return std::atan2(-m_vector.y, -m_vector.x) * (180.f / 3.141592653);}
+    float degrees() const
+    {
+        float degrees = std::atan2(m_vector.y, m_vector.x) * (180.f / 3.141592653);
+        if (degrees < 180) degrees += 180;
+        return degrees;
+    }
+
+    sf::Vector2f getVector() {return m_vector;}
 
 private:
     sf::Vector2f m_vector;
@@ -83,6 +91,17 @@ public:
     LuaVector2f getMousePosition(LuaWindow window) {return sf::Vector2f(sf::Mouse::getPosition(*window.getWindow()));}
 };
 
+class LuaMath
+{
+public:
+    LuaMath() = default;
+
+    float signedAngle(LuaVector2f vec1, LuaVector2f vec2)
+    {
+        return thor::signedAngle(vec1.getVector(), vec2.getVector());
+    }
+};
+
 void registerLuaSFMLWrappers(lua_State* L)
 {
     luabridge::getGlobalNamespace(L).
@@ -121,12 +140,19 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("isKeyPressed", &LuaInput::isKeyPressed).
             addFunction("isMousePressed", &LuaInput::isMousePressed).
             addFunction("getMousePosition", &LuaInput::getMousePosition).
+        endClass().
+        beginClass<LuaMath>("Math").
+            addFunction("signedAngle", &LuaMath::signedAngle).
         endClass();
 
     //Push classes for lua access
     LuaInput luaInput;
     luabridge::push(L, luaInput);
     lua_setglobal(L, "Input");
+
+    LuaMath luaMath;
+    luabridge::push(L, luaMath);
+    lua_setglobal(L, "Math");
 }
 
 #endif //LUASFMLWRAPPERS_HPP_INCLUDED
