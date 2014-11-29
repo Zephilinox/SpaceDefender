@@ -24,6 +24,8 @@ function rotate(key)
 end
 
 function move(dt)
+	rectShape:setPosition(Input:getMousePosition(Window))
+	
 	local vecPos = Vector2f(0, 0)
 
 	if Input:isKeyPressed("W") then

@@ -56,6 +56,8 @@ public:
 
     LuaVector2f getSize() {return sf::Vector2f(m_window->getSize());}
 
+    sf::RenderWindow* getWindow() {return m_window;}
+
 private:
     sf::RenderWindow* m_window;
 };
@@ -72,6 +74,8 @@ public:
     {
         return sf::Mouse::isButtonPressed(thor::toMouseButton(mouseButton));
     }
+
+    LuaVector2f getMousePosition(LuaWindow window) {return sf::Vector2f(sf::Mouse::getPosition(*window.getWindow()));}
 };
 
 void registerLuaSFMLWrappers(lua_State* L)
@@ -108,6 +112,7 @@ void registerLuaSFMLWrappers(lua_State* L)
         beginClass<LuaInput>("Input").
             addFunction("isKeyPressed", &LuaInput::isKeyPressed).
             addFunction("isMousePressed", &LuaInput::isMousePressed).
+            addFunction("getMousePosition", &LuaInput::getMousePosition).
         endClass();
 
     //Push classes for lua access
