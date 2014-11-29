@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <string>
+#include <cmath>
 
 template <class T>
 std::string toString(T val)

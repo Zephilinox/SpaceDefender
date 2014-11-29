@@ -6,6 +6,7 @@ local player = {}
 player.shape = RectangleShape()
 player.shape:setFillColor(Color(255, 180, 0, 255))
 player.shape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
+player.shape:setOrigin(Vector2f(0, 5))
 
 function player:randomColor()
 	if Input:isMousePressed("Left") then
@@ -24,9 +25,7 @@ function player:rotate(key)
 	end
 end
 
-function player:move(dt)
-	player.shape:setPosition(Input:getMousePosition(Window))
-	
+function player:move(dt)	
 	local vecPos = Vector2f(0, 0)
 
 	if Input:isKeyPressed("W") then
@@ -49,21 +48,27 @@ function player:move(dt)
 end
 
 function player:grow(dt)
-	vector.x = vector.x + (100 * dt)
-	player.shape:setSize(vector)
+	if vector.x < 100 then
+		vector.x = vector.x + (100 * dt)
+		player.shape:setSize(vector)
+	end
+end
+
+function player:followMouse(dt)
+	local shapePos = player.shape:getPosition()
+	local mousePos = Input:getMousePosition(Window)
+	local diff = Vector2f(shapePos.x - mousePos.x, shapePos.y - mousePos.y)
+	
+	player.shape:setRotation(diff:degrees())
 end
 
 function player:drawRect()
 	return player.shape
 end
 
-function plain(dt)
-	print(dt)
-end
-
 LuaHandler:hook("eventKeyPressed", "rotate", player.rotate, player)
 LuaHandler:hook("update", "move", player.move, player)
-LuaHandler:hook("update", "plain", plain)
+LuaHandler:hook("update", "followMouse", player.followMouse, player)
 LuaHandler:hook("update", "randomColor", player.randomColor, player)
 LuaHandler:hook("update", "grow", player.grow, player)
 LuaHandler:hook("draw", "drawRect", player.drawRect, player)

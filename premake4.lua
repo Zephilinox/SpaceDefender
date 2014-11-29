@@ -72,11 +72,11 @@ if system == "windows" then
     os.copydir("builds/".._ACTION.."/dll", "builds/".._ACTION.."/bin/Release/")
 end
 
-solution("GalacticEmpires")
+solution("SpaceDefenders")
     configurations  {"Debug", "Release"}
     location        ("builds/".._ACTION)
     
-    project "GalacticEmpires"
+    project "SpaceDefenders"
         language        ("C++")
         location        ("builds/".._ACTION)
         objdir          ("builds/".._ACTION.."/obj")

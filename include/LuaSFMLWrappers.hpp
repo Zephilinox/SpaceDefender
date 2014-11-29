@@ -21,6 +21,8 @@ public:
     float getX() const {return m_vector.x;}
     float getY() const {return m_vector.y;}
 
+    float degrees() const {return std::atan2(-m_vector.y, -m_vector.x) * (180.f / 3.141592653);}
+
 private:
     sf::Vector2f m_vector;
 };
@@ -43,6 +45,9 @@ public:
 
     void setFillColor(sf::Color col) {m_shape.setFillColor(col);}
     sf::Color getFillColor() {return m_shape.getFillColor();}
+
+    void setOrigin(LuaVector2f origin) {m_shape.setOrigin(origin);}
+    LuaVector2f getOrigin() {return m_shape.getOrigin();}
 
 private:
     sf::RectangleShape m_shape;
@@ -87,6 +92,7 @@ void registerLuaSFMLWrappers(lua_State* L)
             addProperty("y", &LuaVector2f::getY, &LuaVector2f::setY).
             addFunction("__add", &LuaVector2f::operator+).
             addFunction("__sub", &LuaVector2f::operator+).
+            addFunction("degrees", &LuaVector2f::degrees).
         endClass().
         beginClass<sf::Color>("Color").
             addConstructor<void(*)(int, int, int, int)>().
@@ -105,6 +111,8 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("getRotation", &LuaRectangleShape::getRotation).
             addFunction("setFillColor", &LuaRectangleShape::setFillColor).
             addFunction("getFillColor", &LuaRectangleShape::getFillColor).
+            addFunction("setOrigin", &LuaRectangleShape::setOrigin).
+            addFunction("getOrigin", &LuaRectangleShape::getOrigin).
         endClass().
         beginClass<LuaWindow>("Window").
             addFunction("getSize", &LuaWindow::getSize).
