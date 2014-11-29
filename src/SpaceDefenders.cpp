@@ -60,7 +60,8 @@ void SpaceDefenders::handleEvent(const sf::Event& e)
         {
             for (auto& func : m_luaHandler.getHookFunctions("eventKeyPressed"))
             {
-                func(thor::toString(e.key.code));
+                func.first(func.second, thor::toString(e.key.code));
+                //func(thor::toString(e.key.code));
             }
         } break;
 
@@ -68,7 +69,15 @@ void SpaceDefenders::handleEvent(const sf::Event& e)
         {
             for (auto& func : m_luaHandler.getHookFunctions("eventKeyReleased"))
             {
-                func(thor::toString(e.key.code));
+                if (func.second.isNil())
+                {
+                    func.first(thor::toString(e.key.code));
+                }
+                else
+                {
+                    func.first(func.second, thor::toString(e.key.code));
+                }
+                //func(thor::toString(e.key.code));
             }
         } break;
 
@@ -83,7 +92,15 @@ void SpaceDefenders::update(float dt)
 {
     for (auto& func : m_luaHandler.getHookFunctions("update"))
     {
-        func(dt);
+        if (func.second.isNil())
+        {
+            func.first(dt);
+        }
+        else
+        {
+            func.first(func.second, dt);
+        }
+        //func(dt);
     }
 }
 
@@ -93,7 +110,18 @@ void SpaceDefenders::draw()
 
     for (auto& func : m_luaHandler.getHookFunctions("draw"))
     {
-        m_window.draw(func().cast<LuaRectangleShape>());
+        if (func.second.isNil())
+        {
+
+            m_window.draw(func.first().cast<LuaRectangleShape>());
+        }
+        else
+        {
+            m_window.draw(func.first(func.second).cast<LuaRectangleShape>());
+        }
+        /*LuaRectangleShape* ret = func.callCast<LuaRectangleShape>();
+        sf::RectangleShape* ret2 = *ret;
+        m_window.draw(*ret2);*/
     }
 
     m_window.display();

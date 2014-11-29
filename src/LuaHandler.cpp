@@ -29,13 +29,13 @@ LuaHandler::LuaHandler()
     m_hooks["draw"];
 }
 
-bool LuaHandler::hook(std::string eventName, std::string uniqueFuncName, luabridge::LuaRef luaFunc)
+bool LuaHandler::hook(std::string eventName, std::string uniqueFuncName, luabridge::LuaRef luaFunc, luabridge::LuaRef luaTable)
 {
     if (m_hooks.count(eventName))
     {
         if (luaFunc.isFunction())
         {
-            m_hooks[eventName].push_back(luaFunc);
+            m_hooks[eventName].push_back(std::make_pair(luaFunc, luaTable));
             std::cout << "Succeeded in hooking " << uniqueFuncName << " to " << eventName << "\n";
             return true;
         }
@@ -52,7 +52,7 @@ bool LuaHandler::hook(std::string eventName, std::string uniqueFuncName, luabrid
     return false;
 }
 
-std::vector<luabridge::LuaRef>& LuaHandler::getHookFunctions(std::string eventName)
+std::vector<LuaPair>& LuaHandler::getHookFunctions(std::string eventName)
 {
     if (m_hooks.count(eventName))
     {

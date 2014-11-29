@@ -2,29 +2,30 @@ local vector = Vector2f(0, 0)
 vector.x = 10
 vector.y = 10
 
-local rectShape = RectangleShape()
-rectShape:setFillColor(Color(255, 180, 0, 255))
-rectShape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
+local player = {}
+player.shape = RectangleShape()
+player.shape:setFillColor(Color(255, 180, 0, 255))
+player.shape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
 
-function randomColor()
+function player:randomColor()
 	if Input:isMousePressed("Left") then
 		local newCol = Color(math.random(256)-1, math.random(256)-1, math.random(256)-1, 255)
-		rectShape:setFillColor(newCol)
+		player.shape:setFillColor(newCol)
 	end
 end
 
-function rotate(key)
-	local rotation = rectShape:getRotation()
+function player:rotate(key)
+	local rotation = player.shape:getRotation()
 	
 	if key == "Q" then
-		rectShape:setRotation(rotation + 10)
+		player.shape:setRotation(rotation + 10)
 	elseif key == "E" then
-		rectShape:setRotation(rotation - 10)
+		player.shape:setRotation(rotation - 10)
 	end
 end
 
-function move(dt)
-	rectShape:setPosition(Input:getMousePosition(Window))
+function player:move(dt)
+	player.shape:setPosition(Input:getMousePosition(Window))
 	
 	local vecPos = Vector2f(0, 0)
 
@@ -44,20 +45,25 @@ function move(dt)
 		vecPos.x = vecPos.x + 100 * dt
 	end
 
-	rectShape:setPosition(rectShape:getPosition() + vecPos)
+	player.shape:setPosition(player.shape:getPosition() + vecPos)
 end
 
-function grow(dt)
+function player:grow(dt)
 	vector.x = vector.x + (100 * dt)
-	rectShape:setSize(vector)
+	player.shape:setSize(vector)
 end
 
-function drawRect()
-	return rectShape
+function player:drawRect()
+	return player.shape
 end
 
-LuaHandler:hook("eventKeyPressed", "rotate", rotate)
-LuaHandler:hook("update", "move", move)
-LuaHandler:hook("update", "randomColor", randomColor)
-LuaHandler:hook("update", "grow", grow)
-LuaHandler:hook("draw", "drawRect", drawRect)
+function plain(dt)
+	print(dt)
+end
+
+LuaHandler:hook("eventKeyPressed", "rotate", player.rotate, player)
+LuaHandler:hook("update", "move", player.move, player)
+LuaHandler:hook("update", "plain", plain)
+LuaHandler:hook("update", "randomColor", player.randomColor, player)
+LuaHandler:hook("update", "grow", player.grow, player)
+LuaHandler:hook("draw", "drawRect", player.drawRect, player)
