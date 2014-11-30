@@ -66,6 +66,7 @@ class LuaWindow
 public:
     LuaWindow(sf::RenderWindow* window) {m_window = window;}
     operator sf::RenderWindow&() {return *m_window;}
+    void draw(LuaRectangleShape& shape) {m_window->draw(shape);}
 
     LuaVector2f getSize() {return sf::Vector2f(m_window->getSize());}
 
@@ -135,6 +136,7 @@ void registerLuaSFMLWrappers(lua_State* L)
         endClass().
         beginClass<LuaWindow>("Window").
             addFunction("getSize", &LuaWindow::getSize).
+            addFunction("draw", &LuaWindow::draw).
         endClass().
         beginClass<LuaInput>("Input").
             addFunction("isKeyPressed", &LuaInput::isKeyPressed).
