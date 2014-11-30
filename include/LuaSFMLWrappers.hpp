@@ -73,6 +73,7 @@ public:
 private:
     sf::Clock m_clock;
 };
+
 class LuaWindow
 {
 public:
@@ -135,6 +136,13 @@ public:
 
         return LuaVector2f(0, 0);
     }
+
+    LuaVector2f degreesToVector(float degrees)
+    {
+        float rad = degrees * (3.141592653f / 180.f);
+        LuaVector2f vec = LuaVector2f(std::sin(rad), -std::cos(rad));
+        return vec;
+    }
 };
 
 void registerLuaSFMLWrappers(lua_State* L)
@@ -187,6 +195,7 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("lengthSquared", &LuaMath::lengthSquared).
             addFunction("length", &LuaMath::length).
             addFunction("normalise", &LuaMath::normalise).
+            addFunction("degreesToVector", &LuaMath::degreesToVector).
         endClass();
 
     //Push classes for lua access

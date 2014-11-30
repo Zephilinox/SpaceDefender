@@ -34,10 +34,10 @@ end
 
 function player:randomColor(key)
 	if key == "R" then
-		self.shape:setFillColor(Color(	math.random(0, 255),
-										math.random(0, 255),
-										math.random(0, 255),
-										255))
+		self.shape:setFillColor(Color(math.random(0, 255),
+		                              math.random(0, 255),
+		                              math.random(0, 255),
+		                              255))
 	end
 end
 
@@ -60,11 +60,11 @@ function player:move(dt)
 		vecPos.x = vecPos.x + 100 * dt
 	end
 
-	self.shape:setPosition(player.shape:getPosition() + vecPos)
+	self.shape:setPosition(self.shape:getPosition() + vecPos)
 end
 
 function player:shoot(dt)
-	if Input:isKeyPressed("Space") then
+	if Input:isKeyPressed("Space") or Input:isMousePressed("Left") then
 		local target = Input:getMousePosition(Window)
 		local speed = 300;
 		
