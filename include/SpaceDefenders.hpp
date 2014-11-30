@@ -23,6 +23,7 @@ private:
     void reloadLua();
 
     sf::RenderWindow m_window;
+    sf::Clock m_fpsDelay;
 
     std::unique_ptr<LuaHandler> m_luaHandler;
 };

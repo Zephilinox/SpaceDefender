@@ -45,8 +45,8 @@ function level:spawnAsteroid()
 	pos.y = pos.y + Window:getSize().y/2
 	
 	local center = Vector2f(Window:getSize().x/2, Window:getSize().y/2)
-	local diff = Vector2f(pos.x - center.x, pos.y - center.y)
-	local dir = Math:normalise(diff)
+	local dif = Vector2f(pos.x - center.x, pos.y - center.y)
+	local dir = Math:normalise(dif)
 	dir.x = dir.x * -100
 	dir.y = dir.y * -100
 	

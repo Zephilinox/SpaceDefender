@@ -35,6 +35,11 @@ void SpaceDefenders::gameLoop()
         draw();
 
         prevFrameTime = frameClock.restart();
+        if (m_fpsDelay.getElapsedTime() > sf::seconds(1))
+        {
+            m_fpsDelay.restart();
+            std::cout << "FPS: " << 1.f / prevFrameTime.asSeconds() << "\n";
+        }
     }
 }
 
