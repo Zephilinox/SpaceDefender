@@ -42,7 +42,7 @@ function gun:cullBullets()
 end
 
 function gun:shoot(target, speed)
-	if self.fireClock:seconds() > 0.2 then
+	if self.fireClock:seconds() > 0.1 then
 		self.fireClock:restart()
 		
 		print("Bullets: " .. #self.bullets)

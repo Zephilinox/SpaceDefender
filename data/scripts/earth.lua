@@ -15,7 +15,7 @@ function earth.new()
 	
 	self.health = maxHealth
 	self.healthText = Text(FontDejavu)
-	self.healthText:setPosition(Vector2f(Window:getSize().x - 50, 50))
+	self.healthText:setPosition(Vector2f(Window:getSize().x - 48, 8))
 	self.healthText.string = tostring(self.health)
 	
 	return self

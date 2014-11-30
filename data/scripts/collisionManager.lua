@@ -4,13 +4,14 @@ local asteroid = require("data/scripts/asteroid")
 
 collisionManager.__index = collisionManager
 
-function collisionManager.new(asteroids, bullets, earth)
+function collisionManager.new(asteroids, bullets, earth, player)
 	local self = {}
 	setmetatable(self, collisionManager)
 	
 	self.asteroids = asteroids
 	self.bullets = bullets
 	self.earth = earth
+	self.player = player
 	
 	return self
 end
@@ -21,6 +22,7 @@ function collisionManager:update(dt)
 			if v.shape:intersecting(v2.shape) then
 				v.alive = false
 				v2.alive = false
+				self.player.score = self.player.score + 1
 			end
 		end
 		

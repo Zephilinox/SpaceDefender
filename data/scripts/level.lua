@@ -26,7 +26,7 @@ function level:update(dt)
 		end
 	end
 	
-	if self.spawnClock:seconds() > 0.75 then
+	if self.spawnClock:seconds() > math.random(0.3, 1) then
 		self.spawnClock:restart()
 		
 		self:spawnAsteroid()

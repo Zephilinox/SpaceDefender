@@ -9,6 +9,8 @@ player.shape:setOrigin(Vector2f(12, 16))
 
 player.gun = gun:new(player.shape:getPosition())
 
+player.score = 0
+
 function player:handleKeyPressed(key)
 	self:randomColor(key)
 end
