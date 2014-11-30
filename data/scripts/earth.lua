@@ -14,6 +14,9 @@ function earth.new()
 	self.shape:setPosition(Vector2f(Window:getSize().x/2, Window:getSize().y/2))
 	
 	self.health = maxHealth
+	self.healthText = Text(FontDejavu)
+	self.healthText:setPosition(Vector2f(Window:getSize().x - 50, 50))
+	self.healthText.string = tostring(self.health)
 	
 	return self
 end
@@ -28,10 +31,12 @@ function earth:update()
 	
 	self.shape:setFillColor(col)
 	print("Health: " .. self.health)
+	self.healthText.string = tostring(self.health)
 end
 
 function earth:draw()
-	Window:draw(self.shape)
+	Window:drawShape(self.shape)
+	Window:drawText(self.healthText)
 end
 
 return earth

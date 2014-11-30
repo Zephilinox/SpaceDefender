@@ -25,7 +25,7 @@ function selflet:update(dt)
 end
 
 function selflet:draw()
-	Window:draw(self.shape)
+	Window:drawShape(self.shape)
 end
 
 function selflet:visible()

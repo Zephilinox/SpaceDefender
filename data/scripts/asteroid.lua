@@ -24,7 +24,7 @@ function asteroid:update(dt)
 end
 
 function asteroid:draw()	
-	Window:draw(self.shape)
+	Window:drawShape(self.shape)
 end
 
 function asteroid:move(dt)	

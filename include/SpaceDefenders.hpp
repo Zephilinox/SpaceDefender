@@ -26,6 +26,7 @@ private:
     sf::Clock m_fpsDelay;
 
     std::unique_ptr<LuaHandler> m_luaHandler;
+    std::unique_ptr<sf::Font> m_font;
 };
 
 #endif //SPACEDEFENDERS_HPP

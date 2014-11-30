@@ -7,8 +7,10 @@
 #include "LuaSFMLWrappers.hpp"
 
 SpaceDefenders::SpaceDefenders()
+    : m_font(new sf::Font())
 {
     m_window.create(sf::VideoMode(1280, 720, 32), "Space Defenders");
+    m_font->loadFromFile("data/fonts/DejaVuSans.ttf");
 
     reloadLua();
 }
@@ -139,6 +141,12 @@ void SpaceDefenders::reloadLua()
     LuaWindow luaWindow(&m_window);
     luabridge::push(m_luaHandler->getLuaState(), luaWindow);
     lua_setglobal(m_luaHandler->getLuaState(), "Window");
+
+    //Push font to the lua state for access
+    LuaFont dejavu;
+    dejavu.font = m_font.get();
+    luabridge::push(m_luaHandler->getLuaState(), dejavu);
+    lua_setglobal(m_luaHandler->getLuaState(), "FontDejavu");
 
     m_luaHandler->loadFile("data/scripts/main.lua");
     m_luaHandler->execute();

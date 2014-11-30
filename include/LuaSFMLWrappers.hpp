@@ -82,37 +82,6 @@ private:
     sf::Clock m_clock;
 };
 
-class LuaWindow
-{
-public:
-    LuaWindow(sf::RenderWindow* window) {m_window = window;}
-    operator sf::RenderWindow&() {return *m_window;}
-    void draw(LuaRectangleShape& shape) {m_window->draw(shape);}
-
-    LuaVector2f getSize() {return sf::Vector2f(m_window->getSize());}
-
-    sf::RenderWindow* getWindow() {return m_window;}
-
-private:
-    sf::RenderWindow* m_window;
-};
-
-class LuaInput
-{
-public:
-    bool isKeyPressed(std::string key)
-    {
-        return sf::Keyboard::isKeyPressed(thor::toKeyboardKey(key));
-    }
-
-    bool isMousePressed(std::string mouseButton)
-    {
-        return sf::Mouse::isButtonPressed(thor::toMouseButton(mouseButton));
-    }
-
-    LuaVector2f getMousePosition(LuaWindow window) {return sf::Vector2f(sf::Mouse::getPosition(*window.getWindow()));}
-};
-
 class LuaMath
 {
 public:
@@ -153,6 +122,69 @@ public:
     }
 };
 
+class LuaFont
+{
+public:
+    LuaFont() = default;
+
+    operator sf::Font&() {return *font;}
+
+    sf::Font* font;
+};
+
+class LuaText
+{
+public:
+    LuaText(LuaFont font)
+    {
+        m_text.setFont(font);
+    }
+
+    operator sf::Text&() {return m_text;}
+
+    void setString(std::string str) {m_text.setString(str);}
+    std::string getString() const {return m_text.getString();}
+
+    void setPosition(LuaVector2f vec) {m_text.setPosition(vec);}
+    LuaVector2f getPosition() {return m_text.getPosition();}
+
+private:
+    sf::Text m_text;
+
+};
+
+class LuaWindow
+{
+public:
+    LuaWindow(sf::RenderWindow* window) {m_window = window;}
+    operator sf::RenderWindow&() {return *m_window;}
+    void drawShape(LuaRectangleShape& shape) {m_window->draw(shape);}
+    void drawText(LuaText& text) {m_window->draw(text);}
+
+    LuaVector2f getSize() {return sf::Vector2f(m_window->getSize());}
+
+    sf::RenderWindow* getWindow() {return m_window;}
+
+private:
+    sf::RenderWindow* m_window;
+};
+
+class LuaInput
+{
+public:
+    bool isKeyPressed(std::string key)
+    {
+        return sf::Keyboard::isKeyPressed(thor::toKeyboardKey(key));
+    }
+
+    bool isMousePressed(std::string mouseButton)
+    {
+        return sf::Mouse::isButtonPressed(thor::toMouseButton(mouseButton));
+    }
+
+    LuaVector2f getMousePosition(LuaWindow window) {return sf::Vector2f(sf::Mouse::getPosition(*window.getWindow()));}
+};
+
 void registerLuaSFMLWrappers(lua_State* L)
 {
     luabridge::getGlobalNamespace(L).
@@ -190,9 +222,18 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("restart", &LuaClock::restart).
             addFunction("seconds", &LuaClock::seconds).
         endClass().
+        beginClass<LuaFont>("Font").
+        endClass().
+        beginClass<LuaText>("Text").
+            addConstructor<void(*)(LuaFont)>().
+            addProperty("string", &LuaText::getString, &LuaText::setString).
+            addFunction("setPosition", &LuaText::setPosition).
+            addFunction("getPosition", &LuaText::getPosition).
+        endClass().
         beginClass<LuaWindow>("Window").
             addFunction("getSize", &LuaWindow::getSize).
-            addFunction("draw", &LuaWindow::draw).
+            addFunction("drawShape", &LuaWindow::drawShape).
+            addFunction("drawText", &LuaWindow::drawText).
         endClass().
         beginClass<LuaInput>("Input").
             addFunction("isKeyPressed", &LuaInput::isKeyPressed).

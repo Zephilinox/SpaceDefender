@@ -29,7 +29,7 @@ end
 function player:draw()
 	self.gun:draw()
 	
-	Window:draw(self.shape)
+	Window:drawShape(self.shape)
 end
 
 function player:randomColor(key)
