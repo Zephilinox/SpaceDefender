@@ -18,6 +18,14 @@ function bullet.new(pos, vel)
 	return bul	
 end
 
+function bullet:update(dt)
+	self:move(dt)
+end
+
+function bullet:draw()
+	Window:draw(self.shape)
+end
+
 function bullet:visible()
 	local winSize = Window:getSize()
 	local pos = self.shape:getPosition()
@@ -40,10 +48,6 @@ function bullet:move(dt)
 	vel.x = vel.x * dt
 	vel.y = vel.y * dt
 	self.shape:setPosition(self.shape:getPosition() + vel)
-end
-
-function bullet:draw()
-	Window:draw(self.shape)
 end
 
 return bullet

@@ -6,12 +6,40 @@ player.shape:setFillColor(Color(255, 180, 0, 255))
 player.shape:setSize(Vector2f(10, 10))
 player.shape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
 player.shape:setOrigin(Vector2f(5, 5))
-player.shape:setRotation(350)
 
 player.bullets = {}
 
-function player:randomColor()
-	if Input:isMousePressed("Left") then
+function player:handleKeyPressed(key)
+	self:randomColor(key)
+end
+
+function player:handleKeyReleased(key)
+	self:reset(key)
+end
+
+function player:update(dt)
+	self:removeBullets()
+	
+	for k, v in ipairs(self.bullets) do
+		v:update(dt)
+	end
+	
+	self:grow(dt)
+	self:followMouse(dt)
+	self:move(dt)
+	self:shoot(dt)
+end
+
+function player:draw()
+	for k, v in ipairs(self.bullets) do
+		v:draw()
+	end
+	
+	Window:draw(self.shape)
+end
+
+function player:randomColor(key)
+	if key == "R" then
 		local newCol = Color(math.random(256)-1, math.random(256)-1, math.random(256)-1, 255)
 		self.shape:setFillColor(newCol)
 	end
@@ -19,10 +47,6 @@ end
 
 function player:move(dt)	
 	local vecPos = Vector2f(0, 0)
-	
-	for k, v in ipairs(self.bullets) do
-		v:move(dt)
-	end
 	
 	if Input:isKeyPressed("W") then
 		vecPos.y = vecPos.y - 100 * dt
@@ -43,14 +67,16 @@ function player:move(dt)
 	self.shape:setPosition(player.shape:getPosition() + vecPos)
 end
 
-function player:shoot(dt)
+function player:removeBullets()
 	for k, v in ipairs(self.bullets) do
 		if v:visible() == false then
 			print(#self.bullets)
 			table.remove(self.bullets, k)
 		end
 	end
-	
+end
+
+function player:shoot(dt)
 	if Input:isKeyPressed("Space") then
 		print(#self.bullets)
 		local shapePos = self.shape:getPosition()
@@ -60,7 +86,7 @@ function player:shoot(dt)
 		diff.x = diff.x * 300
 		diff.y = diff.y * 300
 		
-		self.bullets[#self.bullets + 1] = bullet.new(self.shape:getPosition(), diff)
+		self.bullets[#self.bullets + 1] = bullet.new(shapePos, diff)
 	end
 end
 
@@ -87,21 +113,5 @@ function player:reset(key)
 		self.bullets = {}
 	end
 end
-
-function player:draw()
-	for k, v in ipairs(self.bullets) do
-		v:draw()
-	end
-	
-	Window:draw(self.shape)
-end
-
-LuaHandler:hook("eventKeyPressed", "reset", player.reset, player)
-LuaHandler:hook("update", "shoot", player.shoot, player)
-LuaHandler:hook("update", "move", player.move, player)
-LuaHandler:hook("update", "followMouse", player.followMouse, player)
-LuaHandler:hook("update", "randomColor", player.randomColor, player)
-LuaHandler:hook("update", "grow", player.grow, player)
-LuaHandler:hook("draw", "draw", player.draw, player)
 
 return player

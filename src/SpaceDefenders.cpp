@@ -56,7 +56,14 @@ void SpaceDefenders::handleEvent(const sf::Event& e)
 
             for (auto& func : m_luaHandler->getHookFunctions("eventKeyPressed"))
             {
-                func.first(func.second, thor::toString(e.key.code));
+                if (func.second.isNil())
+                {
+                    func.first(thor::toString(e.key.code));
+                }
+                else
+                {
+                    func.first(func.second, thor::toString(e.key.code));
+                }
             }
         } break;
 
