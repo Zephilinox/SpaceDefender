@@ -3,9 +3,9 @@ local gun = require("data/scripts/gun")
 
 player.shape = RectangleShape()
 player.shape:setFillColor(Color(255, 180, 0, 255))
-player.shape:setSize(Vector2f(10, 10))
+player.shape:setSize(Vector2f(24, 32))
 player.shape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
-player.shape:setOrigin(Vector2f(5, 5))
+player.shape:setOrigin(Vector2f(12, 16))
 
 player.gun = gun:new(player.shape:getPosition())
 
@@ -21,7 +21,6 @@ function player:update(dt)
 	self.gun:update(dt)
 	self.gun:updatePos(self.shape:getPosition())
 	
-	self:grow(dt)
 	self:followMouse(dt)
 	self:move(dt)
 	self:shoot(dt)
@@ -70,15 +69,6 @@ function player:shoot(dt)
 		local speed = 300;
 		
 		self.gun:shoot(target, speed)
-	end
-end
-
-function player:grow(dt)
-	local size = self.shape:getSize()
-	
-	if size.x < 40 then
-		size.x = size.x + (100 * dt)
-		self.shape:setSize(size)
 	end
 end
 

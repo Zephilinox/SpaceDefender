@@ -34,13 +34,14 @@ end
 function gun:cullBullets()
 	for k, v in ipairs(self.bullets) do
 		if v:visible() == false then
-			print(#self.bullets)
+			print("Bullets: " .. #self.bullets)
 			table.remove(self.bullets, k)
 		end
 	end
 end
 
 function gun:shoot(target, speed)
+	print("Bullets: " .. #self.bullets)
 	local diff = Vector2f(self.pos.x - target.x, self.pos.y - target.y)
 	local norm = Math:normalise(diff)
 	local vel = Vector2f(norm.x, norm.y)
