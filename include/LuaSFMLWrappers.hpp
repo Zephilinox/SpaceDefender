@@ -61,6 +61,18 @@ private:
     sf::RectangleShape m_shape;
 };
 
+class LuaClock
+{
+public:
+    LuaClock() = default;
+    operator sf::Clock&() {return m_clock;}
+
+    float restart() {m_clock.restart().asSeconds();}
+    float seconds() {return m_clock.getElapsedTime().asSeconds();}
+
+private:
+    sf::Clock m_clock;
+};
 class LuaWindow
 {
 public:
@@ -155,6 +167,11 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("getFillColor", &LuaRectangleShape::getFillColor).
             addFunction("setOrigin", &LuaRectangleShape::setOrigin).
             addFunction("getOrigin", &LuaRectangleShape::getOrigin).
+        endClass().
+        beginClass<LuaClock>("Clock").
+            addConstructor<void(*)(void)>().
+            addFunction("restart", &LuaClock::restart).
+            addFunction("seconds", &LuaClock::seconds).
         endClass().
         beginClass<LuaWindow>("Window").
             addFunction("getSize", &LuaWindow::getSize).

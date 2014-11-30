@@ -9,8 +9,9 @@ function gun.new(pos)
 	
 	g.bullets = {}
 	g.pos = pos
+	g.fireClock = Clock()
 	
-	return g	
+	return g
 end
 
 function gun:update(dt)
@@ -41,14 +42,18 @@ function gun:cullBullets()
 end
 
 function gun:shoot(target, speed)
-	print("Bullets: " .. #self.bullets)
-	local diff = Vector2f(self.pos.x - target.x, self.pos.y - target.y)
-	local norm = Math:normalise(diff)
-	local vel = Vector2f(norm.x, norm.y)
-	vel.x = vel.x * speed
-	vel.y = vel.y * speed
-	
-	self.bullets[#self.bullets + 1] = bullet.new(self.pos, vel)
+	if self.fireClock:seconds() > 0.2 then
+		self.fireClock:restart()
+		
+		print("Bullets: " .. #self.bullets)
+		local diff = Vector2f(self.pos.x - target.x, self.pos.y - target.y)
+		local norm = Math:normalise(diff)
+		local vel = Vector2f(norm.x, norm.y)
+		vel.x = vel.x * speed
+		vel.y = vel.y * speed
+		
+		self.bullets[#self.bullets + 1] = bullet.new(self.pos, vel)
+	end
 end
 
 return gun
