@@ -87,4 +87,8 @@ function player:reset(key)
 	end
 end
 
+function player:getGun()
+	return self.gun
+end
+
 return player

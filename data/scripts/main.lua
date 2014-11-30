@@ -1,5 +1,6 @@
 local player = require("data/scripts/player")
 local level = require("data/scripts/level").new()
+local collisionManager = require("data/scripts/collisionManager").new(level:getAsteroids(), player:getGun():getBullets())
 
 function handleKeyPressed(key)
 	player:handleKeyPressed(key)
@@ -12,6 +13,7 @@ end
 function update(dt)
 	player:update(dt)
 	level:update(dt)
+	collisionManager:update()	
 end
 
 function draw()

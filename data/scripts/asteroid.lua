@@ -12,7 +12,9 @@ function asteroid.new(pos, vel)
 	ast.shape:setRotation(vel:degrees())
 	ast.shape:setPosition(pos)
 	
-	ast.velocity = vel	
+	ast.velocity = vel
+	
+	ast.alive = true
 	
 	return ast
 end

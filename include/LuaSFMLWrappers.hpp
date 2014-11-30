@@ -57,6 +57,14 @@ public:
     void setOrigin(LuaVector2f origin) {m_shape.setOrigin(origin);}
     LuaVector2f getOrigin() {return m_shape.getOrigin();}
 
+    bool intersecting(LuaRectangleShape other)
+    {
+        sf::FloatRect boundingBox1(m_shape.getPosition(), m_shape.getSize());
+        sf::FloatRect boundingBox2(other.m_shape.getPosition(), other.m_shape.getSize());
+
+        return boundingBox1.intersects(boundingBox2);
+    }
+
 private:
     sf::RectangleShape m_shape;
 };
@@ -175,6 +183,7 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("getFillColor", &LuaRectangleShape::getFillColor).
             addFunction("setOrigin", &LuaRectangleShape::setOrigin).
             addFunction("getOrigin", &LuaRectangleShape::getOrigin).
+            addFunction("intersecting", &LuaRectangleShape::intersecting).
         endClass().
         beginClass<LuaClock>("Clock").
             addConstructor<void(*)(void)>().

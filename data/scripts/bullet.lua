@@ -12,13 +12,16 @@ function bullet.new(pos, vel)
 	bul.shape:setRotation(vel:degrees())
 	bul.shape:setPosition(pos)
 	
-	bul.velocity = Vector2f(-vel.x, -vel.y)	
+	bul.velocity = Vector2f(-vel.x, -vel.y)
+	
+	bul.alive = true
 	
 	return bul
 end
 
 function bullet:update(dt)
 	self:move(dt)
+	self:visible()
 end
 
 function bullet:draw()
@@ -30,15 +33,13 @@ function bullet:visible()
 	local pos = self.shape:getPosition()
 	
 	if pos.x < 0 then
-		return false
+		self.alive = false
 	elseif pos.x > winSize.x then
-		return false
+		self.alive = false
 	elseif pos.y < 0 then
-		return false
+		self.alive = false
 	elseif pos.y > winSize.y then
-		return false
-	else
-		return true
+		self.alive = false
 	end
 end
 

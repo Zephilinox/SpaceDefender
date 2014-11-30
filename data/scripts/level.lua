@@ -20,6 +20,10 @@ end
 function level:update(dt)
 	for k, v in ipairs(self.asteroids) do
 		v:update(dt)
+		
+		if not v.alive then
+			table.remove(self.asteroids, k)
+		end
 	end
 	
 	if self.spawnClock:seconds() > 1 then
@@ -51,6 +55,10 @@ function level:spawnAsteroid()
 	dir.y = dir.y * -100
 	
 	self.asteroids[#self.asteroids + 1] = asteroid.new(pos, dir)
+end
+
+function level:getAsteroids()
+	return self.asteroids
 end
 
 return level

@@ -34,7 +34,7 @@ end
 
 function gun:cullBullets()
 	for k, v in ipairs(self.bullets) do
-		if v:visible() == false then
+		if not v.alive then
 			print("Bullets: " .. #self.bullets)
 			table.remove(self.bullets, k)
 		end
@@ -54,6 +54,10 @@ function gun:shoot(target, speed)
 		
 		self.bullets[#self.bullets + 1] = bullet.new(self.pos, vel)
 	end
+end
+
+function gun:getBullets()
+	return self.bullets
 end
 
 return gun
