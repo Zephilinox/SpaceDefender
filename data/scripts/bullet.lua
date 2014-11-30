@@ -9,13 +9,12 @@ function bullet.new(pos, vel)
 	bul.shape:setFillColor(Color(255, 50, 50, 255))
 	bul.shape:setSize(Vector2f(20, 2))
 	bul.shape:setOrigin(Vector2f(0, 1))
-	bul.velocity = Vector2f(0, 0)
-	
-	bul.shape:setPosition(pos)
 	bul.shape:setRotation(vel:degrees())
-	bul.velocity = Vector2f(-vel.x, -vel.y)
+	bul.shape:setPosition(pos)
 	
-	return bul	
+	bul.velocity = Vector2f(-vel.x, -vel.y)	
+	
+	return bul
 end
 
 function bullet:update(dt)
