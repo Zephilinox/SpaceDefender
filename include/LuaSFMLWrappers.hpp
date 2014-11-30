@@ -101,6 +101,28 @@ public:
     {
         return thor::signedAngle(vec1.getVector(), vec2.getVector());
     }
+
+    float lengthSquared(LuaVector2f vec)
+    {
+        return (vec.getX()*vec.getX() + vec.getY()*vec.getY());
+    }
+
+    float length(LuaVector2f vec)
+    {
+        return std::sqrt(lengthSquared(vec));
+    }
+
+    LuaVector2f normalise(LuaVector2f vec)
+    {
+        float lenSqr = lengthSquared(vec);
+        if (lenSqr != 0)
+        {
+            float len = length(vec);
+            return LuaVector2f(vec.getX() / len, vec.getY() / len);
+        }
+
+        return LuaVector2f(0, 0);
+    }
 };
 
 void registerLuaSFMLWrappers(lua_State* L)
@@ -145,6 +167,9 @@ void registerLuaSFMLWrappers(lua_State* L)
         endClass().
         beginClass<LuaMath>("Math").
             addFunction("signedAngle", &LuaMath::signedAngle).
+            addFunction("lengthSquared", &LuaMath::lengthSquared).
+            addFunction("length", &LuaMath::length).
+            addFunction("normalise", &LuaMath::normalise).
         endClass();
 
     //Push classes for lua access

@@ -44,9 +44,23 @@ function player:move(dt)
 end
 
 function player:shoot(dt)
+	for k, v in ipairs(self.bullets) do
+		if v:visible() == false then
+			print(#self.bullets)
+			table.remove(self.bullets, k)
+		end
+	end
+	
 	if Input:isKeyPressed("Space") then
 		print(#self.bullets)
-		self.bullets[#self.bullets + 1] = bullet.new(self.shape:getPosition(), Vector2f(10, 10))
+		local shapePos = self.shape:getPosition()
+		local mousePos = Input:getMousePosition(Window)
+		local diff = Vector2f(shapePos.x - mousePos.x, shapePos.y - mousePos.y)
+		diff = Math:normalise(diff)
+		diff.x = diff.x * 300
+		diff.y = diff.y * 300
+		
+		self.bullets[#self.bullets + 1] = bullet.new(self.shape:getPosition(), diff)
 	end
 end
 
