@@ -1,16 +1,17 @@
-local player = require("data/scripts/player")
+local player = require("data/scripts/player").new()
 local level = require("data/scripts/level").new()
 local earth = require("data/scripts/earth").new()
 local collisionManager = require("data/scripts/collisionManager").new(level:getAsteroids(), player:getGun():getBullets(), earth, player)
 
 local state = "Playing"
 local text = Text(FontDejavu)
-text:setPosition(Vector2f(Window:getSize().x/2 - 364, Window:getSize().y/2 - 32))
+text:setPosition(Vector2f(Window:getSize().x/2 - 400, Window:getSize().y/2 - 32))
 
 function handleKeyPressed(key)
 	if state == "Playing" then
 		player:handleKeyPressed(key)
 	elseif key == "R" then
+		player = require("data/scripts/player").new()
 		level = require("data/scripts/level").new()
 		earth = require("data/scripts/earth").new()
 		collisionManager = require("data/scripts/collisionManager").new(level:getAsteroids(), player:getGun():getBullets(), earth, player)

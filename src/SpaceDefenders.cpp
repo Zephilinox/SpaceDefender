@@ -7,10 +7,14 @@
 #include "LuaSFMLWrappers.hpp"
 
 SpaceDefenders::SpaceDefenders()
-    : m_font(new sf::Font())
+    : m_fontDejavu(new sf::Font())
+    , m_soundBufExplode(new sf::SoundBuffer())
+    , m_soundBufShoot(new sf::SoundBuffer())
 {
     m_window.create(sf::VideoMode(1280, 720, 32), "Space Defenders");
-    m_font->loadFromFile("data/fonts/DejaVuSans.ttf");
+    m_fontDejavu->loadFromFile("data/fonts/DejaVuSans.ttf");
+    m_soundBufExplode->loadFromFile("data/audio/Explode.wav");
+    m_soundBufShoot->loadFromFile("data/audio/Shoot.wav");
 
     reloadLua();
 }
@@ -144,9 +148,20 @@ void SpaceDefenders::reloadLua()
 
     //Push font to the lua state for access
     LuaFont dejavu;
-    dejavu.font = m_font.get();
+    dejavu.font = m_fontDejavu.get();
     luabridge::push(m_luaHandler->getLuaState(), dejavu);
     lua_setglobal(m_luaHandler->getLuaState(), "FontDejavu");
+
+    //Push SoundBuffers
+    LuaSoundBuffer explode;
+    explode.buffer = m_soundBufExplode.get();
+    luabridge::push(m_luaHandler->getLuaState(), explode);
+    lua_setglobal(m_luaHandler->getLuaState(), "SoundExplode");
+
+    LuaSoundBuffer shoot;
+    shoot.buffer = m_soundBufShoot.get();
+    luabridge::push(m_luaHandler->getLuaState(), shoot);
+    lua_setglobal(m_luaHandler->getLuaState(), "SoundShoot");
 
     m_luaHandler->loadFile("data/scripts/main.lua");
     m_luaHandler->execute();

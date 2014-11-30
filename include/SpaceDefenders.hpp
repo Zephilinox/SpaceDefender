@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include "LuaHandler.hpp"
 
@@ -26,7 +27,9 @@ private:
     sf::Clock m_fpsDelay;
 
     std::unique_ptr<LuaHandler> m_luaHandler;
-    std::unique_ptr<sf::Font> m_font;
+    std::unique_ptr<sf::Font> m_fontDejavu;
+    std::unique_ptr<sf::SoundBuffer> m_soundBufExplode;
+    std::unique_ptr<sf::SoundBuffer> m_soundBufShoot;
 };
 
 #endif //SPACEDEFENDERS_HPP

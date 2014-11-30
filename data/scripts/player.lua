@@ -1,15 +1,24 @@
 local player = {}
 local gun = require("data/scripts/gun")
 
-player.shape = RectangleShape()
-player.shape:setFillColor(Color(255, 180, 0, 255))
-player.shape:setSize(Vector2f(24, 32))
-player.shape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
-player.shape:setOrigin(Vector2f(12, 16))
+player.__index = player
 
-player.gun = gun:new(player.shape:getPosition())
+function player.new(pos)
+	local self = {}
+	setmetatable(self, player)
+	
+	self.shape = RectangleShape()
+	self.shape:setFillColor(Color(255, 180, 0, 255))
+	self.shape:setSize(Vector2f(24, 32))
+	self.shape:setPosition(Vector2f(Window:getSize().x / 2, Window:getSize().y / 2))
+	self.shape:setOrigin(Vector2f(12, 16))
 
-player.score = 0
+	self.gun = gun:new(self.shape:getPosition())
+
+	self.score = 0
+	
+	return self
+end
 
 function player:handleKeyPressed(key)
 	self:randomColor(key)
@@ -71,6 +80,10 @@ function player:shoot(dt)
 		local speed = 300;
 		
 		self.gun:shoot(target, speed)
+		local sound = Sound(SoundShoot)
+		sound:setVolume(10)
+		sound:setPitch(math.random(0.8, 1.2))
+		sound:play()
 	end
 end
 

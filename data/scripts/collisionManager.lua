@@ -23,6 +23,10 @@ function collisionManager:update(dt)
 				v.alive = false
 				v2.alive = false
 				self.player.score = self.player.score + 1
+				local explode = Sound(SoundExplode)
+				explode:setVolume(60)
+				explode:setPitch(math.random(0.8, 1.2))
+				explode:play()
 			end
 		end
 		

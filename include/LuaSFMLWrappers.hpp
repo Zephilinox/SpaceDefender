@@ -185,6 +185,69 @@ public:
     LuaVector2f getMousePosition(LuaWindow window) {return sf::Vector2f(sf::Mouse::getPosition(*window.getWindow()));}
 };
 
+class LuaSoundBuffer
+{
+public:
+    LuaSoundBuffer() = default;
+
+    operator sf::SoundBuffer&() {return *buffer;}
+
+    sf::SoundBuffer* buffer;
+};
+
+class LuaSound
+{
+public:
+    LuaSound(LuaSoundBuffer sbuf)
+    {
+        m_sound.setBuffer(*sbuf.buffer);
+    }
+
+    ~LuaSound() {m_sound = sf::Sound(); std::cout << "destroying sound\n";} //fix lua destruction crash
+
+    operator sf::Sound&() {return m_sound;}
+
+    void play() {m_sound.play();}
+    void pause() {m_sound.pause();}
+
+    std::string getStatus()
+    {
+        switch (m_sound.getStatus())
+        {
+            case sf::Sound::Playing:
+            {
+                return "Playing";
+            } break;
+
+            case sf::Sound::Paused:
+            {
+                return "Paused";
+            } break;
+
+            case sf::Sound::Stopped:
+            {
+                return "Stopped";
+            } break;
+
+            default:
+            {
+                return "";
+            } break;
+        }
+
+        return "";
+    }
+
+    void setVolume(float vol) {m_sound.setVolume(vol);}
+    float getVolume() {return m_sound.getVolume();}
+
+    void setPitch(float pitch) {m_sound.setPitch(pitch);}
+    float getPitch() {return m_sound.getPitch();}
+
+private:
+    sf::Sound m_sound;
+};
+
 void registerLuaSFMLWrappers(lua_State* L)
 {
     luabridge::getGlobalNamespace(L).
@@ -222,13 +285,25 @@ void registerLuaSFMLWrappers(lua_State* L)
             addFunction("restart", &LuaClock::restart).
             addFunction("seconds", &LuaClock::seconds).
         endClass().
-        beginClass<LuaFont>("Font").
-        endClass().
         beginClass<LuaText>("Text").
             addConstructor<void(*)(LuaFont)>().
             addProperty("string", &LuaText::getString, &LuaText::setString).
             addFunction("setPosition", &LuaText::setPosition).
             addFunction("getPosition", &LuaText::getPosition).
+        endClass().
+        beginClass<LuaFont>("Font").
+        endClass().
+        beginClass<LuaSound>("Sound").
+            addConstructor<void(*)(LuaSoundBuffer)>().
+            addFunction("play", &LuaSound::play).
+            addFunction("pause", &LuaSound::pause).
+            addFunction("getStatus", &LuaSound::getStatus).
+            addFunction("setVolume", &LuaSound::setVolume).
+            addFunction("getVolume", &LuaSound::getVolume).
+            addFunction("setPitch", &LuaSound::setPitch).
+            addFunction("getPitch", &LuaSound::getPitch).
+        endClass().
+        beginClass<LuaSoundBuffer>("SoundBuffer").
         endClass().
         beginClass<LuaWindow>("Window").
             addFunction("getSize", &LuaWindow::getSize).
