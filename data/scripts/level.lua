@@ -4,17 +4,17 @@ local asteroid = require("data/scripts/asteroid")
 level.__index = level
 
 function level.new()
-	local lev = {}
-	setmetatable(lev, level)
+	local self = {}
+	setmetatable(self, level)
 	
-	lev.asteroids = {}
-	lev.spawnClock = Clock()
+	self.asteroids = {}
+	self.spawnClock = Clock()
 	
 	for i = 0, 16, 1 do
-		lev:spawnAsteroid()
+		self:spawnAsteroid()
 	end
 	
-	return lev
+	return self
 end
 
 function level:update(dt)
@@ -26,7 +26,7 @@ function level:update(dt)
 		end
 	end
 	
-	if self.spawnClock:seconds() > 1 then
+	if self.spawnClock:seconds() > 0.75 then
 		self.spawnClock:restart()
 		
 		self:spawnAsteroid()

@@ -4,14 +4,14 @@ local bullet = require("data/scripts/bullet")
 gun.__index = gun
 
 function gun.new(pos)
-	local g = {}
-	setmetatable(g, gun)
+	local self = {}
+	setmetatable(self, gun)
 	
-	g.bullets = {}
-	g.pos = pos
-	g.fireClock = Clock()
+	self.bullets = {}
+	self.pos = pos
+	self.fireClock = Clock()
 	
-	return g
+	return self
 end
 
 function gun:update(dt)

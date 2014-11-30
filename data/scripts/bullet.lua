@@ -1,34 +1,34 @@
-local bullet = {}
-bullet.__index = bullet
+local selflet = {}
+selflet.__index = selflet
 
-function bullet.new(pos, vel)
-	local bul = {}
-	setmetatable(bul, bullet)
+function selflet.new(pos, vel)
+	local self = {}
+	setmetatable(self, selflet)
 	
-	bul.shape = RectangleShape()
-	bul.shape:setFillColor(Color(255, 50, 50, 255))
-	bul.shape:setSize(Vector2f(20, 2))
-	bul.shape:setOrigin(Vector2f(0, 1))
-	bul.shape:setRotation(vel:degrees())
-	bul.shape:setPosition(pos)
+	self.shape = RectangleShape()
+	self.shape:setFillColor(Color(255, 50, 50, 255))
+	self.shape:setSize(Vector2f(20, 2))
+	self.shape:setOrigin(Vector2f(0, 1))
+	self.shape:setRotation(vel:degrees())
+	self.shape:setPosition(pos)
 	
-	bul.velocity = Vector2f(-vel.x, -vel.y)
+	self.velocity = Vector2f(-vel.x, -vel.y)
 	
-	bul.alive = true
+	self.alive = true
 	
-	return bul
+	return self
 end
 
-function bullet:update(dt)
+function selflet:update(dt)
 	self:move(dt)
 	self:visible()
 end
 
-function bullet:draw()
+function selflet:draw()
 	Window:draw(self.shape)
 end
 
-function bullet:visible()
+function selflet:visible()
 	local winSize = Window:getSize()
 	local pos = self.shape:getPosition()
 	
@@ -43,11 +43,11 @@ function bullet:visible()
 	end
 end
 
-function bullet:move(dt)
+function selflet:move(dt)
 	local vel = Vector2f(self.velocity.x, self.velocity.y)
 	vel.x = vel.x * dt
 	vel.y = vel.y * dt
 	self.shape:setPosition(self.shape:getPosition() + vel)
 end
 
-return bullet
+return selflet

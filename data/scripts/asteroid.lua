@@ -2,21 +2,21 @@ local asteroid = {}
 asteroid.__index = asteroid
 
 function asteroid.new(pos, vel)
-	local ast = {}
-	setmetatable(ast, asteroid)
+	local self = {}
+	setmetatable(self, asteroid)
 	
-	ast.shape = RectangleShape()
-	ast.shape:setFillColor(Color(100, 50, 0, 255))
-	ast.shape:setSize(Vector2f(20, 20))
-	ast.shape:setOrigin(Vector2f(10, 10))
-	ast.shape:setRotation(vel:degrees())
-	ast.shape:setPosition(pos)
+	self.shape = RectangleShape()
+	self.shape:setFillColor(Color(100, 50, 0, 255))
+	self.shape:setSize(Vector2f(20, 20))
+	self.shape:setOrigin(Vector2f(10, 10))
+	self.shape:setRotation(vel:degrees())
+	self.shape:setPosition(pos)
 	
-	ast.velocity = vel
+	self.velocity = vel
 	
-	ast.alive = true
+	self.alive = true
 	
-	return ast
+	return self
 end
 
 function asteroid:update(dt)	
